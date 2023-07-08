@@ -11,12 +11,15 @@ import {
 import { CitiesService } from './cities.service';
 import { CreateCityDto } from './dto/create-city.dto';
 import { UpdateCityDto } from './dto/update-city.dto';
+import { Roles } from '../roles.decorator';
+import { Role } from 'src/users/enums/role.enum';
 
 @Controller('cities')
 export class CitiesController {
   constructor(private readonly citiesService: CitiesService) {}
 
   @Post()
+  @Roles(Role.ADMIN)
   create(@Body() createCityDto: CreateCityDto) {
     return this.citiesService.create(createCityDto);
   }
