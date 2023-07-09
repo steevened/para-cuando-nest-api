@@ -18,7 +18,7 @@ export class AuthService {
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID,
       });
-      // console.log(ticket.getPayload(), 'ticket');
+      console.log(ticket.getPayload(), 'ticket');
       const { email, name, picture } = ticket.getPayload();
       return this.userService.create({ email, name, picture });
     } catch (error) {

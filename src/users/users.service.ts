@@ -17,15 +17,15 @@ export class UsersService {
     try {
       const user = await this.findOneByEmail(createUserDto.email);
       if (!user) {
-        return `user ${createUserDto.email} created`;
-        // const newUser = this.usersRepository.create({
-        //   ...createUserDto,
-        //   roles: [Role.USER],
-        // });
-        // return this.usersRepository.save(newUser);
+        // return `user ${createUserDto.email} created`;
+        const newUser = this.usersRepository.create({
+          ...createUserDto,
+          roles: [Role.USER],
+        });
+        return this.usersRepository.save(newUser);
       }
 
-      return `user ${createUserDto.email} already exists`;
+      return user;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
