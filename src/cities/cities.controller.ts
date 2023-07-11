@@ -38,8 +38,8 @@ export class CitiesController {
   }
 
   @Patch(':id')
-  // @UseGuards(AuthGuard)
-  // @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard)
+  @Roles(Role.ADMIN)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateCityDto: UpdateCityDto,
@@ -48,8 +48,8 @@ export class CitiesController {
   }
 
   @Delete(':id')
-  // @UseGuards(AuthGuard)
-  // @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard)
+  @Roles(Role.ADMIN)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.citiesService.remove(id);
   }
