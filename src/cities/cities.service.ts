@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCityDto } from './dto/create-city.dto';
 import { UpdateCityDto } from './dto/update-city.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,15 +34,37 @@ export class CitiesService {
     }
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} city`;
+  async findOne(id: string) {
+    try {
+      const city = await this.citiesRepository.findOneBy({ id });
+      if (!city) throw new NotFoundException(`City with id ${id} not found`);
+      return city;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  update(id: string, updateCityDto: UpdateCityDto) {
-    return `This action updates a #${id} city`;
+  async update(id: string, updateCityDto: UpdateCityDto) {
+    const city = await this.citiesRepository.preload({
+      id,
+      ...updateCityDto,
+    });
+    if (!city) throw new NotFoundException(`City with id ${id} not found`);
+
+    try {
+      await this.citiesRepository.save(city);
+      return city;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} city`;
+  async remove(id: string) {
+    const city = await this.findOne(id);
+    try {
+      await this.citiesRepository.delete(city);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

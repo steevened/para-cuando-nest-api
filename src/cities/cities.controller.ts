@@ -21,25 +21,26 @@ export class CitiesController {
   constructor(private readonly citiesService: CitiesService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
-  @Roles(Role.ADMIN)
-  create(@Body() createCityDto: CreateCityDto) {
+  // @UseGuards(AuthGuard)
+  // @Roles(Role.ADMIN)
+  async create(@Body() createCityDto: CreateCityDto) {
     return this.citiesService.create(createCityDto);
   }
 
-  @UseGuards(AuthGuard)
   @Get()
   async findAll() {
     return await this.citiesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.citiesService.findOne(id);
   }
 
   @Patch(':id')
-  update(
+  // @UseGuards(AuthGuard)
+  // @Roles(Role.ADMIN)
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateCityDto: UpdateCityDto,
   ) {
@@ -47,7 +48,9 @@ export class CitiesController {
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  // @UseGuards(AuthGuard)
+  // @Roles(Role.ADMIN)
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.citiesService.remove(id);
   }
 }

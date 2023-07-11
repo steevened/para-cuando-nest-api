@@ -15,4 +15,15 @@ export class City {
     type: 'varchar',
   })
   country: string;
+
+  @Column({
+    type: 'varchar',
+    unique: true,
+  })
+  slug: string;
+
+  @Column({
+    type: 'varchar',
+  })
+  image_url: string;
 }

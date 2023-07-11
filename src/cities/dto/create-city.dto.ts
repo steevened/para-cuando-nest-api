@@ -8,4 +8,12 @@ export class CreateCityDto {
   @IsString()
   @MinLength(3)
   country: string;
+
+  @IsString()
+  @MinLength(2)
+  slug: string;
+
+  @IsString()
+  @MinLength(5)
+  image_url: string;
 }
