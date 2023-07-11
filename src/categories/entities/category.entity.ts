@@ -18,6 +18,7 @@ export class Category {
 
   @Column({
     type: 'varchar',
+    unique: true,
   })
   slug: string;
 

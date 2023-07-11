@@ -27,6 +27,7 @@ export class CitiesController {
     return this.citiesService.create(createCityDto);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   async findAll() {
     return await this.citiesService.findAll();
