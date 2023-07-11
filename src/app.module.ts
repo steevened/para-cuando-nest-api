@@ -9,6 +9,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './roles.guard';
 import { User } from './users/entities/user.entity';
 import { AuthGuard } from './auth/auth.guard';
+import { CategoriesModule } from './categories/categories.module';
+import { Category } from './categories/entities/category.entity';
 
 @Module({
   imports: [
@@ -25,11 +27,12 @@ import { AuthGuard } from './auth/auth.guard';
       password: process.env.POSTGRES_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
-      entities: [City, User],
+      entities: [City, User, Category],
     }),
     CitiesModule,
     AuthModule,
     UsersModule,
+    CategoriesModule,
   ],
   controllers: [],
   providers: [
