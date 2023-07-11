@@ -48,7 +48,18 @@ export class CategoriesService {
     }
   }
 
-  async findOne(slug: string) {
+  async findOne(id: string) {
+    try {
+      const category = await this.categoriesRepository.findOneBy({ id });
+      if (!category)
+        throw new NotFoundException(`Category with id ${id} not found`);
+      return category;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async findOneBySlug(slug: string) {
     try {
       const category = await this.categoriesRepository.findOneBy({ slug });
       if (!category)
@@ -59,11 +70,34 @@ export class CategoriesService {
     }
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    let slug;
+    if (updateCategoryDto.name) {
+      slug = this.convertToSlug(updateCategoryDto.name);
+    }
+    const category = await this.categoriesRepository.preload({
+      id,
+      slug,
+      ...updateCategoryDto,
+    });
+    if (!category)
+      throw new NotFoundException(`Category with id ${id} not found`);
+
+    try {
+      await this.categoriesRepository.save(category);
+      return category;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    const category = await this.findOne(id);
+
+    try {
+      await this.categoriesRepository.delete(category);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }
