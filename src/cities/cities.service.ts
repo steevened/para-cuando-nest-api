@@ -44,6 +44,17 @@ export class CitiesService {
     }
   }
 
+  async findOneBySlug(slug: string) {
+    try {
+      const city = await this.citiesRepository.findOneBy({ slug });
+      if (!city)
+        throw new NotFoundException(`City with slug ${slug} not found`);
+      return city;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
   async update(id: string, updateCityDto: UpdateCityDto) {
     const city = await this.citiesRepository.preload({
       id,

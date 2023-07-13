@@ -37,9 +37,14 @@ export class CitiesController {
     return this.citiesService.findOne(id);
   }
 
+  @Get(':slug')
+  async findOneBySlug(@Param('slug') slug: string) {
+    return this.citiesService.findOneBySlug(slug);
+  }
+
   @Patch(':id')
-  @UseGuards(AuthGuard)
-  @Roles(Role.ADMIN)
+  // @UseGuards(AuthGuard)
+  // @Roles(Role.ADMIN)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateCityDto: UpdateCityDto,
