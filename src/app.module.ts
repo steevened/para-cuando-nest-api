@@ -11,6 +11,7 @@ import { User } from './users/entities/user.entity';
 import { AuthGuard } from './auth/auth.guard';
 import { CategoriesModule } from './categories/categories.module';
 import { Category } from './categories/entities/category.entity';
+import { PetsModule } from './pets/pets.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { Category } from './categories/entities/category.entity';
     AuthModule,
     UsersModule,
     CategoriesModule,
+    PetsModule,
   ],
   controllers: [],
   providers: [
