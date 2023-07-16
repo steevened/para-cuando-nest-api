@@ -12,6 +12,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { CategoriesModule } from './categories/categories.module';
 import { Category } from './categories/entities/category.entity';
 import { PetsModule } from './pets/pets.module';
+import { Pet } from './pets/entities/pet.entity';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { PetsModule } from './pets/pets.module';
       password: process.env.POSTGRES_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
-      entities: [City, User, Category],
+      entities: [City, User, Category, Pet],
     }),
     CitiesModule,
     AuthModule,

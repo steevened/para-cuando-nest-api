@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Pet } from 'src/pets/entities/pet.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class City {
@@ -26,4 +33,7 @@ export class City {
     type: 'varchar',
   })
   image_url: string;
+
+  @OneToMany((type) => Pet, (pet) => pet.city)
+  pets: Pet[];
 }
