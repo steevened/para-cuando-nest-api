@@ -1,6 +1,7 @@
 import { City } from 'src/cities/entities/city.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PetKind } from '../enums/pets.enum';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Pet {
@@ -26,6 +27,9 @@ export class Pet {
   })
   breed?: string;
 
-  @ManyToOne((type) => City, (city) => city.pets)
+  @ManyToOne(() => City, (city) => city.pets)
   city: City;
+
+  @ManyToOne(() => User, (user) => user.pets)
+  user: User;
 }

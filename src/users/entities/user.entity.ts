@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from '../../role.enum';
+import { Pet } from 'src/pets/entities/pet.entity';
 
 @Entity()
 export class User {
@@ -30,4 +31,7 @@ export class User {
     enum: Role,
   })
   roles?: Role[];
+
+  @OneToMany(() => Pet, (pet) => pet.user)
+  pets: Pet[];
 }
