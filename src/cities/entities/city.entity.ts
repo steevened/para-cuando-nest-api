@@ -1,8 +1,9 @@
 import { Pet } from 'src/pets/entities/pet.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
-  JoinTable,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -34,6 +35,9 @@ export class City {
   })
   image_url: string;
 
-  @OneToMany((type) => Pet, (pet) => pet.city)
+  @OneToMany(() => Pet, (pet) => pet.city)
   pets: Pet[];
+
+  @ManyToOne(() => User, (user) => user.cities)
+  user: User;
 }

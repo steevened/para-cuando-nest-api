@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from '../../role.enum';
 import { Pet } from 'src/pets/entities/pet.entity';
+import { City } from 'src/cities/entities/city.entity';
 
 @Entity()
 export class User {
@@ -34,4 +35,7 @@ export class User {
 
   @OneToMany(() => Pet, (pet) => pet.user)
   pets: Pet[];
+
+  @OneToMany(() => City, (city) => city.user)
+  cities: City[];
 }

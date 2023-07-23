@@ -73,7 +73,7 @@ export class CitiesService {
   async remove(id: string) {
     const city = await this.findOne(id);
     try {
-      await this.citiesRepository.delete(city);
+      await this.citiesRepository.remove(city);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
