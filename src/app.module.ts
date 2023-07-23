@@ -35,15 +35,6 @@ import { Pet } from './pets/entities/pet.entity';
     PetsModule,
   ],
   controllers: [],
-  providers: [
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AuthGuard,
-    // },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: RolesGuard,
-    // },
-  ],
+  providers: [],
 })
 export class AppModule {}

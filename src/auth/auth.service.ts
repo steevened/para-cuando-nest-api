@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -23,8 +22,10 @@ export class AuthService {
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID,
       });
+      console.log(ticket, ticket.getPayload());
 
       const { email } = ticket.getPayload();
+
       return await this.userService.findOneByEmail(email);
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -33,17 +34,18 @@ export class AuthService {
 
   async login(req: Request): Promise<any> {
     const authHeader = req.headers.authorization;
+
     if (!authHeader) {
       throw new UnauthorizedException('Missing token');
     }
-    // console.log(authHeader);
     const token = authHeader;
-    const ticket = await client.verifyIdToken({
-      idToken: token.length > 1 ? token.split(' ')[1] : token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
 
     try {
+      const ticket = await client.verifyIdToken({
+        idToken: token.length > 1 ? token.split(' ')[1] : token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      if (!ticket) throw new BadRequestException('Invalid token');
       const { email, name, picture } = ticket.getPayload();
       return this.userService.create({ email, name, picture });
     } catch (error) {
