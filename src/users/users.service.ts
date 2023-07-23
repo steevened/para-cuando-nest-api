@@ -31,20 +31,28 @@ export class UsersService {
     }
   }
 
-  findAll() {
-    return `This action returns all users`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  findOneByEmail(email: string) {
+  async findAll() {
     try {
-      return this.usersRepository.findOne({ where: { email } });
+      return await this.usersRepository.find();
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  async findOne(id: number) {
+    return `This action returns a #${id} user`;
+  }
+
+  async findOneByEmail(email: string) {
+    try {
+      return await this.usersRepository.findOne({ where: { email } });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async findMe() {
+    return 'This action returns my user information';
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
