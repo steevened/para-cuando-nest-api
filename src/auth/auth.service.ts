@@ -3,9 +3,14 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { OAuth2Client } from 'google-auth-library';
 import { UsersService } from 'src/users/users.service';
+import { Auth } from './entities/auth.entity';
+import { Repository } from 'typeorm';
+import { CreateAuthDto } from './dto/create-auth.dto';
+import { Role } from 'src/role.enum';
 
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -14,7 +19,12 @@ const client = new OAuth2Client(
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+
+    @InjectRepository(Auth)
+    private authRepository: Repository<Auth>,
+  ) {}
 
   async validateToken(token: string): Promise<any> {
     try {
@@ -22,11 +32,10 @@ export class AuthService {
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID,
       });
-      console.log(ticket, ticket.getPayload());
 
       const { email } = ticket.getPayload();
 
-      return await this.userService.findOneByEmail(email);
+      return await this.findOneByEmail(email);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -46,11 +55,38 @@ export class AuthService {
         audience: process.env.GOOGLE_CLIENT_ID,
       });
       if (!ticket) throw new BadRequestException('Invalid token');
-      console.log(ticket, ticket.getPayload());
-      const { email, name, picture } = ticket.getPayload();
-      return this.userService.create({ email, name, picture });
+      console.log(ticket.getPayload());
+      const { email, name, picture, iat } = ticket.getPayload();
+      return this.create({ email, name, picture, token }, iat);
     } catch (error) {
       throw new BadRequestException(error);
+    }
+  }
+
+  async create(createAuthDto: CreateAuthDto, iat: number) {
+    try {
+      const user = await this.findOneByEmail(createAuthDto.email);
+      if (!user) {
+        const newUser = this.authRepository.create({
+          ...createAuthDto,
+          roles: [Role.USER],
+          created_at: iat,
+          updated_at: new Date(),
+        });
+        return this.authRepository.save(newUser);
+      }
+
+      return user;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async findOneByEmail(email: string): Promise<any> {
+    try {
+      return await this.authRepository.findOne({ where: { email } });
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
   }
 }
