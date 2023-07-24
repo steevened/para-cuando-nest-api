@@ -1,7 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Role } from '../../role.enum';
 import { Pet } from 'src/pets/entities/pet.entity';
 import { City } from 'src/cities/entities/city.entity';
+import { Auth } from 'src/auth/entities/auth.entity';
 
 @Entity()
 export class User {
@@ -38,4 +45,7 @@ export class User {
 
   @OneToMany(() => City, (city) => city.user)
   cities: City[];
+
+  @OneToOne(() => Auth, (auth) => auth.id)
+  auth: Auth;
 }

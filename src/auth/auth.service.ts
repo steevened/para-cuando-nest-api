@@ -46,6 +46,7 @@ export class AuthService {
         audience: process.env.GOOGLE_CLIENT_ID,
       });
       if (!ticket) throw new BadRequestException('Invalid token');
+      console.log(ticket, ticket.getPayload());
       const { email, name, picture } = ticket.getPayload();
       return this.userService.create({ email, name, picture });
     } catch (error) {
