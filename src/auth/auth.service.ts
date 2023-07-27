@@ -71,8 +71,8 @@ export class AuthService {
           ...createAuthDto,
           roles: [Role.USER],
           // TODO: change iat number to Date timestamp
-          created_at: iat,
-          updated_at: new Date().getDate(),
+          created_at: new Date(iat),
+          updated_at: new Date(),
         });
         return this.authRepository.save(newUser);
       }
