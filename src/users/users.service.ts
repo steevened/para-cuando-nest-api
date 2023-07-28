@@ -17,24 +17,6 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    try {
-      const user = await this.findOneByEmail(createUserDto.email);
-      if (!user) {
-        // return `user ${createUserDto.email} created`;
-        const newUser = this.usersRepository.create({
-          ...createUserDto,
-          roles: [Role.USER],
-        });
-        return this.usersRepository.save(newUser);
-      }
-
-      return user;
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
-
   async findAll() {
     try {
       return await this.usersRepository.find();

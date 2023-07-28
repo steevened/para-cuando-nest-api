@@ -70,7 +70,6 @@ export class AuthService {
         const newUser = this.authRepository.create({
           ...createAuthDto,
           roles: [Role.USER],
-          // TODO: change iat number to Date timestamp
           created_at: new Date(iat),
           updated_at: new Date(),
         });
