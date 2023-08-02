@@ -56,20 +56,20 @@ export class AuthService {
       });
       if (!ticket) throw new BadRequestException('Invalid token');
       const { email, name, picture, iat } = ticket.getPayload();
-      return this.create({ email, name, picture, token }, iat);
+      return this.create({ email, name, picture, token });
     } catch (error) {
       throw new BadRequestException(error);
     }
   }
 
-  async create(createAuthDto: CreateAuthDto, iat: number) {
+  async create(createAuthDto: CreateAuthDto) {
     try {
       const user = await this.findOneByEmail(createAuthDto.email);
       if (!user) {
         const newUser = this.authRepository.create({
           ...createAuthDto,
           roles: [Role.USER],
-          created_at: new Date(iat),
+          created_at: new Date(),
           updated_at: new Date(),
         });
         return this.authRepository.save(newUser);
